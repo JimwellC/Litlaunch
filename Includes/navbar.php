@@ -10,6 +10,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <ul class="nav-links">
       <li><a href="/index.php">Home</a></li> <!-- Absolute path for Home -->
       
+      <!-- Allow non-logged-in users to browse books -->
+      <li><a href="/books/browse.php">Browse Books</a></li>
+
       <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
         <?php if ($_SESSION['role'] === 'admin'): ?>
           <!-- Admin specific links -->
@@ -18,7 +21,6 @@ if (session_status() === PHP_SESSION_NONE) {
           <li><a href="/admin/analytics.php">Analytics</a></li>
         <?php else: ?>
           <!-- User specific links for books -->
-          <li><a href="/books/browse.php">Browse Books</a></li>
           <li><a href="/books/create.php">Add New Book</a></li>
           <li><a href="/books/my-books.php">My Books</a></li>
         <?php endif; ?>

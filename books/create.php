@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'user') {
+    header("Location: /login.php"); // Redirect to login page if not a user
+    exit();
+}
 require_once '../db/config.php';
 include("../includes/navbar.php");
 
@@ -27,11 +32,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'user') {
     <p style="color: #f87171; text-align:center;"><?= htmlspecialchars($_GET['error']) ?></p>
   <?php endif; ?>
 
-  <form action="process_create.php" method="POST" class="login-form">
+  <form action="process_create.php" method="POST" class="login-form" enctype="multipart/form-data">
     <input type="text" name="title" placeholder="Book Title" required>
     <input type="text" name="author" placeholder="Author" required>
     <input type="number" step="0.01" name="price" placeholder="Price (₱)" required>
-    <input type="text" name="image_url" placeholder="Image File Name (e.g. book1.jpg)" required>
+    <input type="file" name="image" accept="image/*" required>
     <button type="submit" class="btn">Add Book</button>
   </form>
 </div>

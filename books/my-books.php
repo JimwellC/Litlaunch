@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['role'] !== 'user') {
+    header("Location: /login.php"); // Redirect to login page if not a user
+    exit();
+}
 require_once '../db/config.php';
 include("../includes/navbar.php");
 
@@ -34,7 +40,7 @@ $user_id = $_SESSION['user_id'];
         if ($books) {
           foreach ($books as $book) {
             echo "<div class='book-card'>";
-            echo "<img src='../assets/" . htmlspecialchars($book['image_url']) . "' alt='Book cover' class='book-image'>";
+            echo "<img src='../assets/images/" . htmlspecialchars($book['image_url']) . "' alt='Book cover' class='book-image'>";
             echo "<h3>" . htmlspecialchars($book['title']) . "</h3>";
             echo "<p><strong>Author:</strong> " . htmlspecialchars($book['author']) . "</p>";
             echo "<p><strong>Price:</strong> ₱" . htmlspecialchars($book['price']) . "</p>";

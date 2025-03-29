@@ -12,7 +12,7 @@
   <div class="hero">
     <h1>🚀 Welcome to LitLaunch</h1>
     <p>Your gateway to launching bright ideas.</p>
-    <a href="login.php" class="btn">🚀 Login</a>
+    <a href="books/browse.php" class="btn">🚀 Browse Books</a>
   </div>
   
 

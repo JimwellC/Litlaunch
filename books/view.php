@@ -38,7 +38,7 @@ try {
 <body>
 
   <div class="book-detail">
-    <img src="../assets/<?= htmlspecialchars($book['image_url']) ?>" alt="Book cover">
+    <img src="../assets/images/<?= htmlspecialchars($book['image_url']) ?>" alt="Book cover">
     <h2><?= htmlspecialchars($book['title']) ?></h2>
     <p><strong>Author:</strong> <?= htmlspecialchars($book['author']) ?></p>
     <p><strong>Price:</strong> ₱<?= htmlspecialchars($book['price']) ?></p>
