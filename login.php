@@ -10,29 +10,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->execute([$email]);
   $user = $stmt->fetch();
 
-  // Check if user exists and password matches
+  // Log user login attempt
+  $user_id = isset($user['id']) ? $user['id'] : null;
+  $action = 'User login attempt';
+  $details = 'Email: ' . htmlspecialchars($email);
+
+  // If the user exists and password matches
   if ($user && password_verify($password, $user['password'])) {
     $_SESSION['logged_in'] = true;
     $_SESSION['user_id']   = $user['id'];
     $_SESSION['name']      = $user['name'];
     $_SESSION['role']      = $user['role'];
 
+    // Insert successful login attempt into audit logs
+    $stmt_log = $pdo->prepare("INSERT INTO audit_logs (action, user_id, details) VALUES (?, ?, ?)");
+    $stmt_log->execute([$action, $user_id, 'Login successful']);
+
     // Redirect based on the user role
     if ($user['role'] === 'admin') {
       header("Location: admin/index.php");  // Redirect to admin dashboard
       exit();
     } else {
-      header("Location: dashboard.php");  // Redirect to user dashboard
+      header("Location: books/browse.php");  // Redirect to user dashboard
       exit();
     }
   } else {
+    // Log failed login attempt
+    $action = 'Failed login attempt';
+    $details = 'Invalid email or password';
+
+    // Insert failed login attempt into audit logs
+    $stmt_log = $pdo->prepare("INSERT INTO audit_logs (action, user_id, details) VALUES (?, ?, ?)");
+    $stmt_log->execute([$action, $user_id, $details]);
+
     // If credentials are invalid, redirect to login page with an error message
     header("Location: login.php?error=Invalid email or password.");
     exit();
   }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

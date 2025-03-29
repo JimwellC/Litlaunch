@@ -32,17 +32,17 @@ try {
     exit();
   }
 
-  // Get the image path
-  $image_path = '../assets/images/' . $book['image_url'];
-
-  // Delete the image file if it exists
-  if (file_exists($image_path)) {
-    unlink($image_path);  // Delete the image file
-  }
-
   // Display confirmation page
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // If confirmed, delete the book
+    // If confirmed, delete the book and image
+    $image_path = '../assets/images/' . $book['image_url'];
+    
+    // Delete the image file if it exists
+    if (file_exists($image_path)) {
+        unlink($image_path);  // Delete the image file
+    }
+
+    // Delete the book from the database
     $stmt = $pdo->prepare("DELETE FROM books WHERE id = ?");
     $stmt->execute([$book_id]);
 

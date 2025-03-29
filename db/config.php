@@ -1,5 +1,5 @@
 <?php
-$host = '127.0.0.1'; // service name from docker-compose.yml
+$host = 'db'; // service name from docker-compose.yml
 $db   = 'litlaunch';
 $user = 'root';
 $pass = 'root';

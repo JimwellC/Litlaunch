@@ -1,4 +1,5 @@
 <?php
+session_start(); // Start the session
 require_once 'db/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,9 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $hashed = password_hash($password, PASSWORD_DEFAULT);
 
   try {
+    // Insert new user into the database
     $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->execute([$name, $email, $hashed]);
 
+    // Log the registration action into the audit logs
+    $action = 'User registered';
+    $user_id = $pdo->lastInsertId(); // Get the last inserted user ID
+    $details = 'New user registered with email: ' . htmlspecialchars($email);
+
+    // Insert audit log entry
+    $stmt_log = $pdo->prepare("INSERT INTO audit_logs (action, user_id, details) VALUES (?, ?, ?)");
+    $stmt_log->execute([$action, $user_id, $details]);
+
+    // Redirect to the login page with a success message
     header("Location: login.php?registered=1");
     exit();
   } catch (PDOException $e) {
